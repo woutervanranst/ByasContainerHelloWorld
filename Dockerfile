@@ -1,5 +1,5 @@
 # Use the official .NET 9.0 runtime with SDK so we can build and run in one container
-FROM mcr.microsoft.com/dotnet/sdk:9.0
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 
 WORKDIR /app
 
