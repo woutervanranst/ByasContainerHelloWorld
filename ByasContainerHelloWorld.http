@@ -1,0 +1,6 @@
+@ByasContainerHelloWorld_HostAddress = http://localhost:5093
+
+GET {{ByasContainerHelloWorld_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
