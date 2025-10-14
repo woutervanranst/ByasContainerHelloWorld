@@ -1,13 +1,17 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 
-// SIMPLE MAXIMUM LOAD - No mercy, just push to the limit!
+// LINEAR RAMP TO 2500 USERS - Build up the pressure!
 export const options = {
   scenarios: {
-    max_load_immediately: {
-      executor: 'constant-vus',
-      vus: 2500,        // Immediately start with 1000 users
-      duration: '5m',   // Keep pushing for 5 minutes straight
+    linear_ramp_to_max: {
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        { duration: '45s', target: 2500 },  // Linear ramp from 0 to 2500 users in 1 minute
+        { duration: '1m', target: 2500 },  // Hold at 2500 users for 2 minutes
+        { duration: '30s', target: 0 },    // Ramp down
+      ],
     },
   },
   
@@ -28,26 +32,20 @@ export default function () {
     'status 5xx (server error)': (r) => r.status >= 500,
     'timeout/connection error': (r) => r.status === 0,
   });
-  
-  // Log failure details in real-time
-  if (response.status !== 200) {
-    console.log(`FAILURE: Status ${response.status}, Duration: ${response.timings.duration}ms`);
-  }
-  
-  // No sleep - maximum aggression, keep hammering!
 }
 
 // Setup function - runs once before the test starts
 export function setup() {
-  console.log('� MAXIMUM LOAD TEST - NO MERCY! 💀');
+  console.log('📈 LINEAR RAMP TO 2500 USERS! �');
   console.log(`Target: ${BASE_URL}/api/http_trigger1`);
-  console.log('🔥 1000 users immediately for 5 minutes straight');
-  console.log('� Will report ALL failures in real-time');
-  console.log('⚡ NO delays, NO thresholds, just pure load!');
+  console.log('🔥 0 → 2500 users in 60 seconds (linear ramp)');
+  console.log('⏱️ Hold at 2500 users for 2 minutes');
+  console.log('⚡ Maximum pressure build-up!');
 }
 
 // Teardown function - runs once after the test ends
 export function teardown(data) {
-  console.log('🏁 MAXIMUM LOAD TEST COMPLETE!');
+  console.log('🏁 LINEAR RAMP TEST COMPLETE!');
+  console.log('Peak load: 2500 concurrent users reached!');
   console.log('Check the summary for detailed failure rates and response times.');
 }
