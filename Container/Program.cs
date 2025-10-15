@@ -1,7 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 var app = builder.Build();
 
 app.MapGet("/hello", () =>
@@ -10,3 +8,5 @@ app.MapGet("/hello", () =>
 });
 
 app.Run();
+
+// Browse to http://localhost:5093/hello
