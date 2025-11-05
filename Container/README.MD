@@ -4,6 +4,8 @@
 
 1. Run it locally
 
+http://localhost:5093/hello
+
 # Docker
 
 docker build -t byas-helloworld .
